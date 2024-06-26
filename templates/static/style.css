@@ -1,0 +1,264 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #141619; 
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.title h1 {
+    font-size: 4em;
+    color: transparent;
+    background: linear-gradient(to bottom, #050a44,#0a21c0, #b3b4bd);
+    -webkit-background-clip: text;
+    background-clip: text;
+    margin: 0;
+}
+
+.title h1:hover {
+    background: linear-gradient(to bottom, #b3b4bd, #0a21c0, #050a44);
+    -webkit-background-clip: text;
+    background-clip: text;
+    margin: 0;
+}
+
+.title p {
+    font-size: 1.8em;
+    color: #b3b4bd; 
+    margin: 0;
+}
+
+.container {
+    padding: 20px;
+    border-radius: 8px;
+    width: 600px;
+    margin-bottom: 20px;
+    color: #112333; 
+}
+
+.input-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.input-section input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 0 4px 4px 0;
+    border: 1px solid #ffffff; 
+    outline: none;
+    background-color: #ffffff; 
+    color: #112333; 
+}
+
+.input-section input[type="file"] {
+    display: none;
+}
+
+.record-button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+    margin-left: -40px;
+}
+
+.record-button img {
+    vertical-align: middle;
+}
+
+#sendData {
+    border: none;
+    background-color: #ffffff; 
+    color: white;
+    padding: 8px;
+    cursor: pointer;
+    margin-left: 10px;
+    border-radius: 4px;
+}
+
+#sendData img {
+    vertical-align: middle;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    cursor: pointer;
+    color: #112333; 
+    background-color: #ffffff; 
+    padding: 8px;
+    border-radius: 4px 0 0 4px;
+}
+
+.custom-file-upload img {
+    vertical-align: middle;
+}
+
+.input-display {
+    background-color: #b1e1f1;
+    text-align: right;
+    margin-top: 20px;
+    padding: 2px;
+    border-radius: 5px;
+    display: none;
+    
+}
+
+.response-display {
+    background-color: #7ce9b2;
+    text-align: left;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    width: 75%; /* Adjusted width for response display */
+}
+
+.sql-command-container {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.copy-button {
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    right: 10px;
+    background-color: #7ce9b2;
+    color: white;
+    border: none;
+    padding: 5px 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.copy-button:hover {
+    background-color: #45a049;
+}
+
+.alert-box {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.5s, bottom 0.5s;
+}
+
+.alert-box.show {
+    opacity: 1;
+    bottom: 40px; /* Animate to slightly higher position */
+}
+
+.alert-box.hide {
+    opacity: 0;
+    bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .title h1 {
+        font-size: 12vw;
+    }
+
+    .title p {
+        font-size: 4.5vw;
+    }
+
+    .input-section {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .input-section input[type="text"] {
+        width: 60%;
+        padding: 10px;
+        font-size: 1em;
+        border: 1px solid #ffffff;
+        outline: none;
+        background-color: #ffffff;
+        color: #112333;
+    }
+
+    .custom-file-upload {
+        flex: 1 1 auto;
+        width: auto;
+        margin: 5px 0;
+    }
+
+    .record-button {
+        flex: 1 1 auto;
+        margin: 5px 0;
+        padding: 8px;
+        background-color: #ffffff;
+    }
+
+    #sendTextData {
+        flex: 1 1 auto;
+        margin: 5px 0;
+    }
+
+    .container {
+        width: 90%;
+    }
+
+    .button {
+        width: 200px;
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .button {
+        width: 100%;
+        font-size: 1em;
+        padding: 15px;
+    }
+}
+
+/* Additional CSS for SVG animation */
+.svg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Ensure SVG stays behind other content */
+    pointer-events: none; /* Prevent SVG from capturing mouse events */
+}
+
+.background-svg {
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Ensure SVG elements do not capture mouse events */
+}
+
+/****************************************************************************************************/
+
