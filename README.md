@@ -27,7 +27,7 @@ The frontend of the project is designed to provide a seamless and engaging user 
 
 ### Prerequisites
 Make sure you have the following installed on your system:
-- Python 3.7+
+- Python 3.12+
 - pip
 
 ### Steps to Set Up
@@ -48,7 +48,7 @@ Make sure you have the following installed on your system:
 
 4. **Run the FastAPI application:**
    ```bash
-   uvicorn main:app --reload
+   uvicorn app:app --reload
    ```
 
 5. **API Testing:**
