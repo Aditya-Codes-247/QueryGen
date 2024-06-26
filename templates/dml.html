@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QueryGen</title>
+    <link rel="stylesheet" href="static\style.css">
+    
+</head>
+
+<body>
+    <div class="svg-container" style="background-color: #000000;">
+        <svg preserveAspectRatio="xMidYMid slice" viewBox="10 10 80 80" class="background-svg">
+            <defs>
+                <style>
+                    @keyframes rotate {
+                        0% {
+                            transform: rotate(0deg);
+                        }
+
+                        100% {
+                            transform: rotate(360deg);
+                        }
+                    }
+
+                    .out-top {
+                        animation: rotate 20s linear infinite;
+                        transform-origin: 13px 25px;
+                    }
+
+                    .in-top {
+                        animation: rotate 10s linear infinite;
+                        transform-origin: 13px 25px;
+                    }
+
+                    .out-bottom {
+                        animation: rotate 25s linear infinite;
+                        transform-origin: 84px 93px;
+                    }
+
+                    .in-bottom {
+                        animation: rotate 15s linear infinite;
+                        transform-origin: 84px 93px;
+                    }
+                </style>
+            </defs>
+            <path fill="#050a44" class="out-top" style="opacity: 0.7;"
+                d="M37-5C25.1-14.7,5.7-19.1-9.2-10-28.5,1.8-32.7,31.1-19.8,49c15.5,21.5,52.6,22,67.2,2.3C59.4,35,53.7,8.5,37-5Z" />
+            <path fill="#0a21c0" class="in-top" style="opacity: 0.7;"
+                d="M20.6,4.1C11.6,1.5-1.9,2.5-8,11.2-16.3,23.1-8.2,45.6,7.4,50S42.1,38.9,41,24.5C40.2,14.1,29.4,6.6,20.6,4.1Z" />
+            <path fill="#050a44" class="out-bottom" style="opacity: 0.7;"
+                d="M105.9,48.6c-12.4-8.2-29.3-4.8-39.4.8-23.4,12.8-37.7,51.9-19.1,74.1s63.9,15.3,76-5.6c7.6-13.3,1.8-31.1-2.3-43.8C117.6,63.3,114.7,54.3,105.9,48.6Z" />
+            <path fill="#0a21c0" class="in-bottom" style="opacity: 0.7;"
+                d="M102,67.1c-9.6-6.1-22-3.1-29.5,2-15.4,10.7-19.6,37.5-7.6,47.8s35.9,3.9,44.5-12.5C115.5,92.6,113.9,74.6,102,67.1Z" />
+        </svg>
+    </div>
+
+    <div class="content">
+        <div class="title">
+            <h1>DML Generator</h1>
+            <p>By QueryGen</p>
+        </div>
+        <div class="container">
+            <div class="input-section">
+                <label for="imageInput" class="custom-file-upload">
+                    <img src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/svg/camera-outline.svg"
+                        alt="Upload" width="24px">
+                </label>
+                <input type="file" id="imageInput" accept="image/png" />
+                <input type="text" id="textInput" placeholder="Type input here..." />
+                <button id="toggleRecording" class="record-button">
+                    <img src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/svg/mic-off-outline.svg"
+                        alt="Mic" width="24px">
+                </button>
+                <button id="sendData">
+                    <img src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/svg/send-outline.svg"
+                        alt="Send" style="align-items: center;" width="24px">
+                </button>
+            </div>
+            <div class="input-display" id="inputDisplay"></div>
+            <div class="response-display" id="responseDisplay"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+
+    </div>
+
+    <script>
+        document.getElementById('sendData').addEventListener('click', async () => {
+    const textInput = document.getElementById('textInput').value;
+    const imageInput = document.getElementById('imageInput').files[0];
+    const inputDisplay = document.getElementById('inputDisplay');
+    const responseDisplay = document.getElementById('responseDisplay');
+
+    inputDisplay.innerHTML = '';
+    responseDisplay.innerHTML = '';
+
+    if (textInput) {
+        inputDisplay.innerHTML = `<p>Text: ${textInput}</p>`;
+        showInputAndResponse();
+        await sendTextData(textInput);
+    } else if (imageInput) {
+        if (imageInput.type !== 'image/png') {
+            alert('Please upload an image in PNG format.');
+            return;
+        }
+        inputDisplay.innerHTML = `<p>Image: ${imageInput.name}</p>`;
+        showInputAndResponse();
+        await sendImageData(imageInput);
+    } else if (audioBlob) {
+        inputDisplay.innerHTML = `<p>Audio Recorded</p><audio controls src="${URL.createObjectURL(audioBlob)}"></audio>`;
+        showInputAndResponse();
+        await sendAudioData(audioBlob);
+    } else {
+        alert('Please provide either text, an image, or an audio input.');
+    }
+
+    function showInputAndResponse() {
+        inputDisplay.style.display = 'block';
+        responseDisplay.style.display = 'block';
+    }
+
+    async function sendTextData(text) {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/generate_sql/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt: text })
+            });
+
+            const result = await response.json();
+            displayResponse(result);
+        } catch (error) {
+            displayResponse({ error: `Error: ${error.message}` });
+        }
+    }
+
+    async function sendImageData(image) {
+        const formData = new FormData();
+        formData.append('file', image);
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/generate_sql_from_image/', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            displayResponse(result);
+        } catch (error) {
+            displayResponse({ error: `Error: ${error.message}` });
+        }
+    }
+
+    async function sendAudioData(audio) {
+        const formData = new FormData();
+        formData.append('file', audio);
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/generate_sql_from_voice/', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            displayResponse(result);
+        } catch (error) {
+            displayResponse({ error: `Error: ${error.message}` });
+        }
+    }
+
+    function displayResponse(result) {
+        let responseHTML = '';
+        if (result["sql_command\n"]) {
+            responseHTML += `
+                <p>SQL Command:</p>
+                <div class="sql-command-container">
+                    <div class="sql-command">${result["sql_command\n"]}</div>
+                    <button class="copy-button" onclick="copyToClipboard()">
+                        <img src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/svg/copy-outline.svg" alt="Copy" style="align-items: center;" width="24px">
+                    </button>
+                </div>
+            `;
+        }
+        if (result.error) {
+            responseHTML += `<p>${result.error}</p>`;
+        }
+        responseDisplay.innerHTML = responseHTML;
+    }
+});
+
+const toggleRecordingButton = document.getElementById('toggleRecording');
+let isRecording = false;
+let mediaRecorder;
+let audioChunks = [];
+let audioBlob;
+
+toggleRecordingButton.addEventListener('click', async () => {
+    if (isRecording) {
+        mediaRecorder.stop();
+        toggleRecordingButton.innerHTML = '<img src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/svg/mic-off-outline.svg" alt="Mic" width="24px">';
+        isRecording = false;
+    } else {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = async () => {
+            audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            audioChunks = [];
+            const audioURL = URL.createObjectURL(audioBlob);
+            document.getElementById('inputDisplay').innerHTML = `<p>Audio Recorded</p><audio controls src="${audioURL}"></audio>`;
+        };
+        mediaRecorder.start();
+        toggleRecordingButton.innerHTML = '<img src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/svg/mic-outline.svg" alt="Mic" width="24px">';
+        isRecording = true;
+    }
+});
+
+function copyToClipboard() {
+    const sqlCommandElement = document.querySelector('.sql-command');
+    const range = document.createRange();
+    range.selectNode(sqlCommandElement);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+
+    const alertBox = document.createElement('div');
+    alertBox.textContent = 'Copied to clipboard';
+    alertBox.className = 'alert-box';
+    document.body.appendChild(alertBox);
+
+    alertBox.offsetHeight; 
+
+    alertBox.classList.add('show');
+
+    setTimeout(() => {
+        alertBox.classList.remove('show');
+        alertBox.classList.add('hide');
+    }, 1000); // Start hiding after 1 second
+
+    setTimeout(() => {
+        document.body.removeChild(alertBox);
+    }, 1500); // Remove after 1.5 seconds (0.5s for the hide animation)
+}
+
+
+
+    </script>
+</body>
+
+</html>
