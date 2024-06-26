@@ -56,3 +56,5 @@ Make sure you have the following installed on your system:
 
 
 With this setup, you'll be able to deploy and test our sophisticated SQL query generator on your local machine, utilizing cutting-edge machine learning models and an intuitive, animated frontend interface.
+
+As of now the application is open sourced, however the future updates may deprecate this repo. to convert it into a hosted website, However the website still will be a free to use service
