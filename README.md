@@ -50,10 +50,9 @@ Make sure you have the following installed on your system:
    ```bash
    uvicorn app:app --reload
    ```
-
+   
 5. **API Testing:**
    Use Curl or any other API testing tool to test the endpoints.
 
-```
 
 With this setup, you'll be able to deploy and test our sophisticated SQL query generator on your local machine, utilizing cutting-edge machine learning models and an intuitive, animated frontend interface.
