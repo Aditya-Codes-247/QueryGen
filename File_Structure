@@ -4,12 +4,21 @@ local_model/
 models/
     schemas.py
 routers/
+    html_pages.py
+    image.py
+    sql.py
+    voice.py
 services/
+    image_service.py
+    sql_service.py
 templates/
     ddl.html
+    dml.html
+    index.html
+    static/
+        style.css
 .gitignore
 LICENSE
 README.md
 main.py
 requirements.txt
-vercel.json
