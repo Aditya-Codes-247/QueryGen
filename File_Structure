@@ -1,0 +1,15 @@
+local_model/
+    spider_model
+    trained_bart_model
+models/
+    schemas.py
+routers/
+services/
+templates/
+    ddl.html
+.gitignore
+LICENSE
+README.md
+main.py
+requirements.txt
+vercel.json
